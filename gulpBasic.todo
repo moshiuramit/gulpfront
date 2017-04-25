@@ -183,13 +183,20 @@ Gulp Build System:
 
   LiveReload with gulp:
     ☐ npm install --save-dev gulp-livereload | npm install --save-dev gulp-connect
+    /////////////////////////////////////
+    // Required 
+    /////////////////////////////////////
+
     var gulp = require('gulp'),
         uglify = require('gulp-uglify'),
         sass = require('gulp-ruby-sass'),
         plumber = require('gulp-plumber'),
         compass = require('gulp-for-compass'),
-        livereload = require('gulp-livereload');
+        //livereload = require('gulp-livereload');
+        connect = require('gulp-connect');
 
+
+    var outputDir = 'app';
     /////////////////////////////////////
     // Script Tasks
     /////////////////////////////////////
@@ -200,7 +207,8 @@ Gulp Build System:
       gulp.src('app/js/*.js')
         .pipe(plumber())
         .pipe(uglify())
-        .pipe(gulp.dest('app/build/js/'));
+        .pipe(gulp.dest('app/build/js/'))
+        .pipe(connect.reload());
     });
 
     // Style Task
@@ -212,16 +220,36 @@ Gulp Build System:
                 sassDir: 'app/scss',
                 cssDir: 'app/build/css',
                 force: true
-            }));
-          
+            }))
+          .pipe(connect.reload());
+    });
+
+    // html Task 
+    gulp.task('html', function() {
+      gulp.src('app/*.html')
+      .pipe(connect.reload());
+      console.log("html Task");
+
     });
 
     // Watch Task 
-    // start Server inside watch
-    gulp.task('watch', function () {
 
+    gulp.task('watch', function () {
+      //var server = livereload();
         gulp.watch('app/js/*.js',['scripts']);
+        gulp.watch('app/*.html',['html']);
         gulp.watch('app/scss/*.scss', ['styles']);
     });
 
-    gulp.task('default',['scripts', 'styles', 'watch']);
+    // connect 
+
+    gulp.task('connect', function(){
+      connect.server({
+          root: 'app', 
+          open: { browser: 'Google Chrome'},
+          livereload: true
+        });
+    });
+
+
+    gulp.task('default',['html', 'scripts', 'styles', 'connect', 'watch' ]);
