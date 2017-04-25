@@ -179,3 +179,49 @@ Gulp Build System:
      }); // watch js folder while running scripts task
 
      gulp.task('default', ['scripts', 'styles', 'watch']);
+
+
+  LiveReload with gulp:
+    ☐ npm install --save-dev gulp-livereload | npm install --save-dev gulp-connect
+    var gulp = require('gulp'),
+        uglify = require('gulp-uglify'),
+        sass = require('gulp-ruby-sass'),
+        plumber = require('gulp-plumber'),
+        compass = require('gulp-for-compass'),
+        livereload = require('gulp-livereload');
+
+    /////////////////////////////////////
+    // Script Tasks
+    /////////////////////////////////////
+
+    // Scripts Task 
+
+    gulp.task('scripts', function() {
+      gulp.src('app/js/*.js')
+        .pipe(plumber())
+        .pipe(uglify())
+        .pipe(gulp.dest('app/build/js/'));
+    });
+
+    // Style Task
+
+    gulp.task('styles', function(){
+      gulp.src('app/scss/*.scss')
+          .pipe(plumber())
+          .pipe(compass({
+                sassDir: 'app/scss',
+                cssDir: 'app/build/css',
+                force: true
+            }));
+          
+    });
+
+    // Watch Task 
+    // start Server inside watch
+    gulp.task('watch', function () {
+
+        gulp.watch('app/js/*.js',['scripts']);
+        gulp.watch('app/scss/*.scss', ['styles']);
+    });
+
+    gulp.task('default',['scripts', 'styles', 'watch']);
