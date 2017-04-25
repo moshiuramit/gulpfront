@@ -22,7 +22,8 @@ gulp.task('scripts', function() {
 	gulp.src('app/js/*.js')
 	  .pipe(plumber())
 	  .pipe(uglify())
-	  .pipe(gulp.dest('app/build/js/'));
+	  .pipe(gulp.dest('app/build/js/'))
+	  .pipe(connect.reload());
 });
 
 // Style Task
@@ -35,24 +36,35 @@ gulp.task('styles', function(){
             cssDir: 'app/build/css',
             force: true
         }))
-			.pipe(livereload());
-			
+			.pipe(connect.reload());
+});
+
+// html Task 
+gulp.task('html', function() {
+	gulp.src('app/*.html')
+	.pipe(connect.reload());
+	console.log("html Task");
+
 });
 
 // Watch Task 
 
 gulp.task('watch', function () {
-	var server = livereload();
+	//var server = livereload();
 		gulp.watch('app/js/*.js',['scripts']);
+		gulp.watch('app/*.html',['html']);
 		gulp.watch('app/scss/*.scss', ['styles']);
 });
 
 // connect 
 
-gulp.task('connect', connect.server({
-		root: [outputDir], 
-		open: {browser: 'Google Chrome'}
-	}));
+gulp.task('connect', function(){
+	connect.server({
+			root: 'app', 
+			open: { browser: 'Google Chrome'},
+			livereload: true
+		});
+});
 
 
-gulp.task('default',['scripts', 'styles', 'watch', 'connect']);
+gulp.task('default',['html', 'scripts', 'styles', 'connect', 'watch' ]);
