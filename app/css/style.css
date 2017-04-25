@@ -1,0 +1,11 @@
+/*  Colors  */
+/* line 4, ../scss/style.scss */
+body {
+  background: #ccc;
+}
+
+/* line 8, ../scss/style.scss */
+div {
+  background: url('../images/icon/help.png?1454937692');
+  width: 10px;
+}

@@ -1,0 +1,181 @@
+Installation :
+ ☐ node -v 
+ ☐ npm -v 
+ cd into project dir 
+ ☐ npm init []
+ ☐ npm install -g gulp // install gulp globally 
+ ☐ gulp -v // Check the version of gulp 
+ Install gulp on project :
+ ☐ npm install --save-dev gulp
+ Install required plugins 
+ ☐ npm install jshint gulp-jshint gulp-sass gulp-concat gulp-uglify gulp-rename --save-dev 
+
+gulpfile.js File : 
+  // Include gulp
+  var gulp = require('gulp'); 
+
+  // Include Our Plugins
+  var jshint = require('gulp-jshint');
+  var sass = require('gulp-sass');
+  var concat = require('gulp-concat');
+  var uglify = require('gulp-uglify');
+  var rename = require('gulp-rename');
+
+  // Lint Task
+  gulp.task('lint', function() {
+      return gulp.src('js/*.js')
+          .pipe(jshint())
+          .pipe(jshint.reporter('default'));
+  });
+
+  // Compile Our Sass
+  gulp.task('sass', function() {
+      return gulp.src('scss/*.scss')
+          .pipe(sass())
+          .pipe(gulp.dest('css'));
+  });
+
+  // Concatenate & Minify JS
+  gulp.task('scripts', function() {
+      return gulp.src('js/*.js')
+          .pipe(concat('all.js'))
+          .pipe(gulp.dest('dist'))
+          .pipe(rename('all.min.js'))
+          .pipe(uglify())
+          .pipe(gulp.dest('dist'));
+  });
+
+  // Watch Files For Changes
+  gulp.task('watch', function() {
+      gulp.watch('js/*.js', ['lint', 'scripts']);
+      gulp.watch('scss/*.scss', ['sass']);
+  });
+
+  // Default Task
+  gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+
+Run Gulp :
+  ☐ gulp
+  ☐ gulp default []
+  ☐ gulp taskName
+  ☐ 
+
+Anatomy of gulpfile.js :) : 
+  ☐ Require Modules 
+
+  ☐ Task 1 
+  ☐ Task 2
+  ☐ Task 3 
+  ☐ Task 4 
+  ☐ ......
+  
+
+Gulp Build System: 
+  ☐ run several tasks for development environment 
+  ☐ npm install --save-dev gulp
+  ☐ create gulpfile.js
+  gulp task('default', function(){
+    console.log("Hello Gulp");
+    gulp.src('js/*.js') // all the .js files src from js directory
+    .pipe(uglify()) // call the function uglify() minify the js files
+    .pipe(gulp.dest('minjs')); //put minified js to the minjs directory
+  }); 
+  ☐ cd into the project and 
+    gulp 
+  Install gulp-uglify on local project:
+    ☐ npm install --save-dev gulp-uglify
+  create default tasks:
+    gulp task('default', function(){
+      //console.log("Hello Gulp");
+      gulp.src('js/*.js') // all the .js files src from js directory
+      .pipe(uglify()) // call the function uglify() minify the js files
+      .pipe(gulp.dest('minjs')); //put minified js to the minjs directory
+    });
+    ☐ gulp 
+   Create Named Tasks:
+     var gulp = require('gulp'),
+        uglify = require('gulp-uglify');
+     // Script task
+     // Uglifies
+     gulp.task('scripts', function(){ // scripts task [named]
+       gulp.src('js/*.js') // take the js files for uglify
+       .pipe(uglify()) // minify the js files 
+       .pipe(gulp.dest('build/js')); // put the minified js to build folder
+     }); 
+     // Styles tasks 
+     gulp.task('styles', function() {
+       console.log("run Styles task");
+     });
+
+     gulp.task('default', ['scripts', 'styles']);
+
+     to run scripts or styles task :
+     ☐ gulp scripts | gulp styles
+     to run all tasks :
+     ☐ gulp 
+
+   Watching files with gulp and sass :
+     var gulp = require('gulp'),
+        uglify = require('gulp-uglify'),
+        sass = require(gulp-ruby-sass);
+     // Script task
+     // Uglifies
+     gulp.task('scripts', function(){ // scripts task [named]
+       gulp.src('js/*.js') // take the js files for uglify
+       .pipe(uglify()) // minify the js files 
+       .pipe(gulp.dest('build/js')); // put the minified js to build folder
+     }); 
+     // Styles tasks 
+     gulp.task('styles', function() {
+       gulp.src('sass/**/*.scss')
+       .pipe(sass({
+         style: 'compressed'
+       }))
+       .pipe(gulp.dest('css/'));
+     });
+     // Watch task
+     //Watches js
+     gulp.task('watch', function(){
+       gulp.watch('js/*js', ['scripts']);
+       gulpl.watch('sass/**/*.scss', 'styles');
+     }); // watch js folder while running scripts task
+
+     gulp.task('default', ['scripts', 'styles', 'watch']);
+
+     to run watch :
+       ☐ gulp watch
+       ☐ gulp // will run all the tasks and will watching the tasks under watch task
+     ☐ npm install --save-dev gulp-ruby-sass 
+     ☐ 
+
+  Keep gulp running with plumber:
+    ☐ npm install --save-dev gulp-plumber 
+    var gulp = require('gulp'),
+        uglify = require('gulp-uglify'),
+        sass = require(gulp-ruby-sass),
+        plumber = require('gulp-plumber');
+     // Script task
+     // Uglifies
+     gulp.task('scripts', function(){ // scripts task [named]
+       gulp.src('js/*.js') // take the js files for uglify
+           .pipe(plumber())
+           .pipe(uglify()) // minify the js files 
+           .pipe(gulp.dest('build/js')); // put the minified js to build folder
+     }); 
+     // Styles tasks 
+     gulp.task('styles', function() {
+       gulp.src('sass/**/*.scss')
+           .pipe(plumber())
+           .pipe(sass({
+             style: 'compressed'
+           }))
+           .pipe(gulp.dest('css/'));
+     });
+     // Watch task
+     //Watches js
+     gulp.task('watch', function(){
+       gulp.watch('js/*js', ['scripts']);
+       gulpl.watch('sass/**/*.scss', 'styles');
+     }); // watch js folder while running scripts task
+
+     gulp.task('default', ['scripts', 'styles', 'watch']);

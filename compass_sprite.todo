@@ -1,0 +1,30 @@
+Compass Mixins:
+  ☐ All of compass mixins have fallback default variables. so we can call a mixin without any parameter. 
+  ☐ we can define the default variable on our local scope to override or we can use as a parameter. 
+  $width: 10px !default;
+  $height: 15px !default;
+  @mixin size($width, $height) {
+    width: $width;
+    height: $height;
+  }
+  ☐ Vendor prefix variables. 
+    $experimental-support-for-mozilla: true;
+    $experimental-support-for-webkit: true;
+
+
+Image Helper and Compass:
+  on config.rb file indicates the location of image  images_dir = "images"
+  http_path = "/" will be include autometically to the other directories. 
+  Relative asset will be true on local and false on server 
+
+  background: image-url('icon/image.png');
+  stylesheet-url();
+  font-url();
+
+Sprites:
+
+
+  @for $i from 1 to $columns {
+
+  
+  }

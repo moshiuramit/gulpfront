@@ -1,0 +1,11 @@
+@import 'compass';
+@import 'partials/variables';
+
+body{
+	background: $grey;
+}
+
+div {
+	background: image-url('icon/help.png');
+	width: 10px;
+}
